@@ -50,6 +50,7 @@ return csvLines.stream()
     .map(strings -> strings[1]) // collect only hobbies
     .map(hobbies -> hobbies.split(":"))
     .flatMap(Arrays::stream)
+    .map(String::trim)
     .collect(toMap(hobby -> hobby, hobby -> 1, Integer::sum));
 ```
 
@@ -58,6 +59,18 @@ return csvLines.stream()
 
 ### 문제 1.2
 위와 같은 데이터를 조회하여 각 취미를 선호하는 정씨 성을 갖는 인원이 몇 명인지 계산하여라.
+
+[ Idea ]
+- 정씨 성을 갖는 라인을 먼저 필터링 한 후에 Quiz1.1로직 적용
+```
+return csvLines.stream()
+    .filter(line -> line[0].startsWith("정"))
+    .map(line -> line[1].replaceAll("\\s", ""))
+    .map(hobbies -> hobbies.split(":"))
+    .flatMap(Arrays::stream)
+    .map(String::trim)
+    .collect(groupingBy(hobby -> hobby, summingInt(hobby -> 1)));
+```
 
 ### 문제 1.3
 위와 같은 데이터를 조회하여 소개 내용에 '좋아'가 몇번 등장하는지 계산하여라.<br>
