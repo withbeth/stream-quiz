@@ -75,5 +75,24 @@ return csvLines.stream()
 ### 문제 1.3
 위와 같은 데이터를 조회하여 소개 내용에 '좋아'가 몇번 등장하는지 계산하여라.<br>
 
+[ Idea ]
+- 소개 내용 컬럼들을 먼저 추출후, 각 라인마다, 소개 내용에 해당 키워드가 "몇번" 등장하는지 카운팅.
+- 각 라인 마다 몇번 등장했는지 카운팅했는지의 총 합계를 reduce 이용하여 계산.
+```
+return csvLines.stream()
+    .map(line -> line[2])
+    .map(introduction -> getMatchCount(introduction, "좋아"))
+    .reduce(0, Integer::sum);
+
+private static int getMatchCount(String line, String keyword) {
+    int result = 0;
+    int foundIndex = line.indexOf(keyword);
+    while (0 <= foundIndex && foundIndex < line.length()) {
+        result++;
+        foundIndex = line.indexOf(keyword, foundIndex + keyword.length());
+    }
+    return result;
+}
+```
 
 <br>

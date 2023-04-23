@@ -4,11 +4,8 @@ import com.opencsv.CSVReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
@@ -40,7 +37,20 @@ public class Quiz1 {
     // 1.3 소개 내용에 '좋아'가 몇번 등장하는지 계산하여라.
     public int quiz3() throws IOException {
         List<String[]> csvLines = readCsvLines();
-        return 0;
+        return csvLines.stream()
+            .map(line -> line[2])
+            .map(introduction -> getMatchCount(introduction, "좋아"))
+            .reduce(0, Integer::sum);
+    }
+
+    private static int getMatchCount(String line, String keyword) {
+        int result = 0;
+        int foundIndex = line.indexOf(keyword);
+        while (0 <= foundIndex && foundIndex < line.length()) {
+            result++;
+            foundIndex = line.indexOf(keyword, foundIndex + keyword.length());
+        }
+        return result;
     }
 
     private List<String[]> readCsvLines() throws IOException {
