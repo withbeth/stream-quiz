@@ -20,6 +20,8 @@
 
 [ Approach1 ]
 - use `Collectors.groupingBy` and `Collectors.couting()`
+> Collector<T, ?, Map<K, D>> groupingBy(Function<? super T, ? extends K> classifier, Collector<? super T, A, D> downstream) {...}
+
 ```
 return csvLines.stream()
     .map(line -> line[1])
