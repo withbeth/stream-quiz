@@ -23,6 +23,8 @@ class Quiz3Test {
     }
 
     private boolean isEquals(List<Integer[]> quiz, List<Integer[]> answer) {
+        System.out.println("answer = " + answer);
+        System.out.println("quiz = " + quiz);
         if (quiz.size() != answer.size()) {
             return false;
         }
