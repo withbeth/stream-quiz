@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,7 +24,10 @@ public class Quiz3 {
     // 3.2 모든 숫자 쌍의 곱이 가장 큰 값을 반환하여라.
     // ex) numbers1 = [1,2,3], numbers2 = [3,4] -> 12
     public int quiz2() {
-        return 0;
+        return numbers1.stream()
+            .flatMap(i -> numbers2.stream().map(j -> i * j))
+            .max(Integer::compare)
+            .orElse(0);
     }
 
 }

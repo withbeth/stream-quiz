@@ -17,6 +17,9 @@ return number1.stream()
     .map(i -> number2.stream().map(j -> Arrays.asList(i, j)))
     .toList();
 ```
+
+[ Problem ]
+
 - `Stream<Stream<Intger[]>>`을 반환하게 되기에, `flatMap`적용 필요.
 
 [ Q. flatMap? ]
@@ -47,3 +50,50 @@ return numbers1.stream()
 ### 문제 3.2
 위와 같은 숫자 리스트가 있을 때 모든 숫자 쌍의 곱이 가장 큰 값을 반환하여라.
 ex) numbers1 = [1,2,3], numbers2 =  [3,4] -> 12
+
+[ Idea ]
+- 각 스트림을 모두 순회해서, 각 숫자쌍의 곱의 리스트로 추출.
+- 해당 곱 리스트의 max값을 반환.
+```
+return numbers1.stream()
+    .flatMap(i -> numbers2.stream().map(j -> i * j))
+    .max();
+```
+
+[ Problem ]
+
+- `max()`는, `Comparator` 인자 필요.
+
+[ Q. 그럼 어떻게 정렬해야 max값을 얻을 수 있나? ]
+- A. 값이 큰 것을 1로 반환하는 Comparator 구현체 제공.
+
+Why :
+- `Stream` interface의 `max()`는 `ReferencePipeline`에서 overriding.
+- 해당 메서드 구현에서는, `BinaryOperator.maxBy()`를 결과값을 reducing.
+- `maxBy()`는, `compare`값이 0 이상인 것을 취한다.
+ 
+```
+// ReferencePipeline
+@Override
+public final Optional<P_OUT> max(Comparator<? super P_OUT> comparator) {
+    return reduce(BinaryOperator.maxBy(comparator));
+}
+
+// BinaryOperator
+public static <T> BinaryOperator<T> maxBy(Comparator<? super T> comparator) {
+    Objects.requireNonNull(comparator);
+    return (a, b) -> comparator.compare(a, b) >= 0 ? a : b;
+}
+```
+
+[ Answer ]
+```
+return numbers1.stream()
+    .flatMap(i -> numbers2.stream().map(j -> i * j))
+    .max(Integer::compare)
+    .orElse(0);
+```
+
+[ Feedback ]
+
+- Integer 객체 이용하는 것보다 int 기본타입 이용하는게 성능상 효율적이니, `mapToInt()`으로 `IntStream`이용하는 것이 더 좋을듯 하다.
