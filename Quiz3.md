@@ -97,3 +97,12 @@ return numbers1.stream()
 [ Feedback ]
 
 - Integer 객체 이용하는 것보다 int 기본타입 이용하는게 성능상 효율적이니, `mapToInt()`으로 `IntStream`이용하는 것이 더 좋을듯 하다.
+
+```
+return numbers1.stream()
+    .flatMapToInt(i -> numbers2.stream().mapToInt(j -> i * j))
+    .max()
+    .orElse(0);
+```
+
+- `Stream.flatMapInt()`를 이용해, `IntStream`반환하도록 하여 Unboxing만 발생시켜 성능 향상.
