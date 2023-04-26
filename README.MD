@@ -12,7 +12,7 @@
 - [Quiz1](https://github.com/withbeth/stream-quiz/blob/master/Quiz1.md)
 - [Quiz2](https://github.com/withbeth/stream-quiz/blob/master/Quiz2.md)
 - [Quiz3](https://github.com/withbeth/stream-quiz/blob/master/Quiz3.md)
-- [Quiz4]()
+- [Quiz4](https://github.com/withbeth/stream-quiz/blob/master/Quiz4.md)
 - [Quiz5]()
 - [Quiz6]()
 - [Quiz7]()
