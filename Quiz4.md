@@ -60,15 +60,108 @@ return transactions.stream()
 ### 문제 4.2
 거래 내역이 있는 거래자가 근무하는 모든 도시를 중복 없이 나열하라.
 
+#### [ Idea ]
+- Convert tx list to trader list
+- Convert trader list to city list
+- use `distinct()` or `Set<도시>`
 
+#### [ My Answer ]
+
+```
+return transactions.stream()
+    .map(Transaction::getTrader)
+    .filter(Objects::nonNull)
+    .map(Trader::getCity)
+    .filter(Objects::nonNull)
+    .distinct()
+    .collect(Collectors.toList());
+```
 
 ### 문제 4.3
 서울에서 근무하는 모든 거래자를 찾아서 이름순서대로 정렬하라.
 
+#### [ Idea ]
 
+- Convert tx list to trader list
+- Filter trader who lives in Seoul
+- Order by Trader name
+
+#### [ My Answer ]
+```
+return transactions.stream()
+    .filter(Objects::nonNull)
+    .map(Transaction::getTrader)
+    .distinct()
+    .filter(trader -> trader != null && targetCity.equals(trader.getCity()))
+    .sorted(Comparator.comparing(Trader::getName))
+    .collect(Collectors.toList());
+```
+
+#### Q. `Comparator.comparing()`?
+
+```
+// AS-IS : 실제 비교하고자 하는 Key.compareTo() 이용
+.sorted((t1, t2) -> t1.getName().compareTo(t2.getName()))
+
+// TO-BE : 간결하게 비교하고자 하는 Key Extractor만 제공
+.sorted(Comparator.comparing(Trader::getName))
+```
+
+```
+public static <T, U extends Comparable<? super U>> Comparator<T> comparing(
+        Function<? super T, ? extends U> keyExtractor)
+{
+    Objects.requireNonNull(keyExtractor);
+    return (Comparator<T> & Serializable)
+        (c1, c2) -> keyExtractor.apply(c1).compareTo(keyExtractor.apply(c2));
+}
+```
+
+#### Q. `distinct`는 무엇을 기준으로 동치성을 확인할까?
+
+A. 당연하지만 `equals()` 기준.
+
+`distinct()`관련 TMI : 
+- For Ordered stream   : stable 보장 O (같은 값이 연산 수행후에도 기존 순서 유지)
+- For Unordered stream(`Stream.generate()`) : stable 보장 x
+
+- stable 보장한다는 소리는 stateful한 연산 이기에, 병렬 처리시 비싼 연산으로 취급된다.
+- 따라서, stable보장 필요 없는 경우는, `BaseStream.unorder()`를 이용해 `order 제약조건` 제거하여 성능 향상 가능.
+```
+/**
+ * Returns a stream consisting of the distinct elements (according to
+ * {@link Object#equals(Object)}) of this stream.
+ *
+ * <p>For ordered streams, the selection of distinct elements is stable
+ * (for duplicated elements, the element appearing first in the encounter
+ * order is preserved.)  For unordered streams, no stability guarantees
+ * are made.
+ *
+ * <p>This is a <a href="package-summary.html#StreamOps">stateful
+ * intermediate operation</a>.
+ *
+ * @apiNote
+ * Preserving stability for {@code distinct()} in parallel pipelines is
+ * relatively expensive (requires that the operation act as a full barrier,
+ * with substantial buffering overhead), and stability is often not needed.
+ * Using an unordered stream source (such as {@link #generate(Supplier)})
+ * or removing the ordering constraint with {@link #unordered()} may result
+ * in significantly more efficient execution for {@code distinct()} in parallel
+ * pipelines, if the semantics of your situation permit.  If consistency
+ * with encounter order is required, and you are experiencing poor performance
+ * or memory utilization with {@code distinct()} in parallel pipelines,
+ * switching to sequential execution with {@link #sequential()} may improve
+ * performance.
+ *
+ * @return the new stream
+ */
+Stream<T> distinct();
+```
 
 ### 문제 4.4
 모든 거래자의 이름을 구분자(",")로 구분하여 정렬하라.
+
+
 
 ### 문제 4.5
 부산에 거래자가 있는지를 확인하라.

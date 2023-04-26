@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Quiz4 {
@@ -37,12 +38,26 @@ public class Quiz4 {
 
     // 4.2 거래 내역이 있는 거래자가 근무하는 모든 도시를 중복 없이 나열하라.
     public List<String> quiz2() {
-        return Collections.emptyList();
+        return transactions.stream()
+            .map(Transaction::getTrader)
+            .filter(Objects::nonNull)
+            .map(Trader::getCity)
+            .filter(Objects::nonNull)
+            .distinct()
+            .collect(Collectors.toList());
     }
 
     // 4.3 서울에서 근무하는 모든 거래자를 찾아서 이름순서대로 정렬하라.
     public List<Trader> quiz3() {
-        return Collections.emptyList();
+        final String targetCity = "Seoul";
+        return transactions.stream()
+            .filter(Objects::nonNull)
+            .map(Transaction::getTrader)
+            .distinct()
+            .filter(trader -> trader != null && targetCity.equals(trader.getCity()))
+            .sorted((t1, t2) -> t1.getName().compareTo(t2.getName()))
+            .sorted(Comparator.comparing(Trader::getName))
+            .collect(Collectors.toList());
     }
 
     // 4.4 모든 거래자의 이름을 구분자(",")로 구분하여 정렬하라.

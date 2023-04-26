@@ -1,6 +1,12 @@
 # Stream API 문제 풀어보기
 위의 문제를 직접 풀어보고 정답이 맞는지 비교가능하도록 프로젝트.
 
+## REMAINING TASKs
+
+- Stream API 병렬 성능 테스트 using benchmark tool
+- Fork-Join 튜닝
+
+
 ## My Progress
 
 - [Quiz1](https://github.com/withbeth/stream-quiz/blob/master/Quiz1.md)
