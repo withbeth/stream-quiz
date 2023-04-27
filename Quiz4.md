@@ -162,20 +162,105 @@ Stream<T> distinct();
 모든 거래자의 이름을 구분자(",")로 구분하여 정렬하라.
 
 
+#### [ Idea ]
+- Convert tx list to trader list
+- Convert trader list to trader name list
+- distinct
+- Sort trader name list with nature order
+- Join with ","
+
+#### [ My Answer ]
+```
+return transactions.stream()
+    .map(tx -> tx.getTrader().getName())
+    .distinct()
+    .sorted(Comparator.naturalOrder())
+    .collect(Collectors.joining(","));
+```
 
 ### 문제 4.5
 부산에 거래자가 있는지를 확인하라.
 
+#### [ Idea ]
+- Use anyMatch() if 트랜잭션의 트레이더 중 부산지역사람 존재하는지
 
+#### [ My Answer ]
+```
+final String targetCity = "Busan";
+return transactions.stream()
+    .anyMatch(tx -> targetCity.equals(tx.getTrader().getCity()));
+```
 
 ### 문제 4.6
 서울에 거주하는 거래자의 모든 거래 금액을 구하라.
 
+#### [ Idea ]
+- 트랜잭션 리스트중, 해당 트랜젹선의 거래자가 서울에 사는 리스트를 필터링
+- 해당 트랜잭션 리스트를 트랜잭션 거래 금액으로 Mapping하여 반환
 
+#### [ My Answer ]
+```
+final String targetCity = "Seoul";
+return transactions.stream()
+    .filter(tx -> targetCity.equals(tx.getTrader().getCity()))
+    .map(Transaction::getValue)
+    .collect(Collectors.toList());
+```
 
 ### 문제 4.7
 모든 거래 내역중에서 거래 금액의 최댓값과 최솟값을 구하라.
 단, 최댓값은 reduce를 이용하고 최솟값은 stream의 min()을 이용하라.
 
+#### [ Idea ]
+- Q. 한 스트림에서 min, max 동시에 구할 수 있나? I don't think so.
+  - -> Use IntStreamStats?
+  - -> 요구 사항이 `max : use reduce(), min : use min()`이니, 아마 스트림 2개 필요하지 않을까?
+  - -> A. YES; 스트림은 한번 소비되면 끝이므로 2개 필요
+- Q. 어떻게 reduce를 이용해 max값을 구하지?
+  - -> 애초에 reduce연산은 누적 값을 구하기 위해 사용하는 거 아닌가?
+  - -> A. checkout reduce java doc
+- Q. reduce연산은, IntStream에서도 이용가능한가?
+  - -> A. YES
+```
+return Arrays.asList(getMaxValue(), getMinValue());
 
-<br>
+int getMaxValue(List<Transaction> transactions) {
+    return transactions.stream()
+        .???
+}
+
+int getMinValue(List<Transaction> transactions) {
+    return transactions.stream()
+        .mapToInt(tx -> tx.getValue())
+        .min();
+}
+```
+
+#### [ My Answer ]
+```
+return new Integer[] {getMaxValue(transactions), getMinValue(transactions)};
+
+int getMaxValue(List<Transaction> transactions) {
+    return transactions.stream()
+        .mapToInt(Transaction::getValue)
+        .reduce(0, (maxSoFar, currentElement) -> maxSoFar < currentElement ? currentElement : maxSoFar);
+}
+
+int getMinValue(List<Transaction> transactions) {
+    return transactions.stream()
+        .mapToInt(Transaction::getValue)
+        .min()
+        .orElse(0);
+}
+```
+
+#### [ Feedback ]
+
+- `min()` return Optional.
+
+- read `reduce()` java doc
+
+#### Reference
+
+https://withbeth.oopy.io/e5cee31d-fb11-49b4-8586-f93635ea519f
+

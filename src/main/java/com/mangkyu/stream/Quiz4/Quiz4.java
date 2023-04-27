@@ -62,22 +62,45 @@ public class Quiz4 {
 
     // 4.4 모든 거래자의 이름을 구분자(",")로 구분하여 정렬하라.
     public String quiz4() {
-        return null;
+        return transactions.stream()
+            .map(tx -> tx.getTrader().getName())
+            .distinct()
+            .sorted(Comparator.naturalOrder())
+            .collect(Collectors.joining(","));
     }
 
     // 4.5 부산에 거래자가 있는지를 확인하라.
     public boolean quiz5() {
-        return false;
+        final String targetCity = "Busan";
+        return transactions.stream()
+            .anyMatch(tx -> targetCity.equals(tx.getTrader().getCity()));
     }
 
     // 4.6 서울에 거주하는 거래자의 모든 거래 금액을 구하라.
     public List<Integer> quiz6() {
-        return Collections.emptyList();
+        final String targetCity = "Seoul";
+        return transactions.stream()
+            .filter(tx -> targetCity.equals(tx.getTrader().getCity()))
+            .map(Transaction::getValue)
+            .collect(Collectors.toList());
     }
 
     // 4.7 모든 거래 내역중에서 거래 금액의 최댓값과 최솟값을 구하라. 단, 최댓값은 reduce를 이용하고 최솟값은 stream의 min()을 이용하라.
     public Integer[] quiz7() {
-        return new Integer[]{0, 0};
+        return new Integer[]{getMaxValue(transactions), getMinValue(transactions)};
+    }
+
+    int getMaxValue(List<Transaction> transactions) {
+        return transactions.stream()
+            .mapToInt(Transaction::getValue)
+            .reduce(0, (maxSoFar, currentElement) -> maxSoFar < currentElement ? currentElement : maxSoFar);
+    }
+
+    int getMinValue(List<Transaction> transactions) {
+        return transactions.stream()
+            .mapToInt(Transaction::getValue)
+            .min()
+            .orElse(0);
     }
 
 }
