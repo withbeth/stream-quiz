@@ -28,9 +28,18 @@ return Arrays.stream(STRING_ARR)
 문자열 배열 String[] strArr = {"aaa","bb","c","dddd"}의 문자열 중에서 가장 긴 것의 길이를 출력하시오.
 
 #### [ Idea ]
-#### [ Answer ]
-#### [ Note ]
+```
+return Arrays.stream(STRING_ARR)
+    .mapToInt(word -> word.length())
+    .reduce(0, (accumulatedSoFar, current) -> accumulatedSoFar < current ? current : accumulatedSoFar);
+```
 
+#### [ Answer ]
+```
+return Arrays.stream(STRING_ARR)
+    .mapToInt(String::length)
+    .reduce(0, Math::max);
+```
 
 <br>
 
