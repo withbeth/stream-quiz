@@ -256,9 +256,34 @@ int getMinValue(List<Transaction> transactions) {
 
 #### [ Feedback ]
 
-- `min()` return Optional.
+- `IntStream.min() or Stream<Integer>.min()` return `Optional`
+
+- `Stream<Integer>.min()` requires Comparator
 
 - read `reduce()` java doc
+
+- 어차피 `Integer[]`로 반환을 할테니, `mapToInt`로 언박싱하는 의미가 없지 않나? 언박싱하지 않고 풀어보기.
+
+#### [ Improved Answer ]
+
+어차피 `Integer[]`로 반환을 할테니, `mapToInt`로 언박싱하는 의미가 없지 않나? 언박싱하지 않고 풀어보기.
+
+```
+return new Integer[] {getMaxValue(transactions), getMinValue(transactions)};
+
+Integer getMaxValue(List<Transaction> transactions) {
+  return transactions.stream()
+    .map(tx -> tx.getValue())
+    .reduce(0, (accumulatedSoFar, current)-> accumulatedSoFar < current ? current : accumulatedSoFar);
+}
+
+Integer getMinValue(List<Transaction> transactions) {
+  return transactions.stream()
+    .map(tx -> tx.getValue())
+    .min(Integer::compareTo)
+    .orElse(0);
+}
+```
 
 #### Reference
 
