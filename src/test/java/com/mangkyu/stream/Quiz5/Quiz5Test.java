@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 
 class Quiz5Test {
 
@@ -41,6 +42,9 @@ class Quiz5Test {
     }
 
     private boolean isEquals(List<Integer[]> quiz, List<Integer[]> answer) {
+        for (Integer[] integers : answer) {
+            System.out.println(Arrays.toString(integers));
+        }
         if (quiz.size() != answer.size()) {
             return false;
         }
