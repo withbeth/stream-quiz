@@ -119,6 +119,15 @@ return IntStream.rangeClosed(1, 6)
     .collect(Collectors.toList());
 ```
 
-#### [ Answer ]
 #### [ Note ]
+
+Q. Integer + Integer은 AutoBoxing이 일어나나?
+- A. YES
+```
+// Before
+Integer sum = new Integer(2) + new Integer(4); 
+
+// After Compiled 
+Integer sum = Integer.valueOf(new Integer(2).intValue()+new Integer(4).intValue());
+```
 

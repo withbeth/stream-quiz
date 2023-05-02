@@ -13,9 +13,8 @@
 - [Quiz2](https://github.com/withbeth/stream-quiz/blob/master/Quiz2.md)
 - [Quiz3](https://github.com/withbeth/stream-quiz/blob/master/Quiz3.md)
 - [Quiz4](https://github.com/withbeth/stream-quiz/blob/master/Quiz4.md)
-- [Quiz5]()
-- [Quiz6]()
-- [Quiz7]()
+- [Quiz5](https://github.com/withbeth/stream-quiz/blob/master/Quiz5.md)
+- [Quiz6](https://github.com/withbeth/stream-quiz/blob/master/Quiz6.md)
 
 
 ## How to Start
