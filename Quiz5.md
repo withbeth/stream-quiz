@@ -122,12 +122,13 @@ return IntStream.rangeClosed(1, 6)
 #### [ Note ]
 
 Q. Integer + Integer은 AutoBoxing이 일어나나?
-- A. YES
+- A. YES; 
+- Refer https://stackoverflow.com/questions/9391569/operation-inside-when-we-add-two-integer-objects
 ```
 // Before
 Integer sum = new Integer(2) + new Integer(4); 
 
-// After Compiled 
+// After Compiled  (unboxing)
 Integer sum = Integer.valueOf(new Integer(2).intValue()+new Integer(4).intValue());
 ```
 
