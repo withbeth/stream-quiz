@@ -16,6 +16,13 @@
 - [Quiz5](https://github.com/withbeth/stream-quiz/blob/master/Quiz5.md)
 - [Quiz6](https://github.com/withbeth/stream-quiz/blob/master/Quiz6.md)
 
+## Next
+
+알고리즘 문제들, Stream으로 풀어보기
+- https://leetcode.com/problems/sort-integers-by-the-power-value/solutions/1784063/java-stream-api/
+- https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/solutions/250484/java-8-solution-using-streams/
+- https://leetcode.com/problems/top-k-frequent-words/solutions/622735/java-solution-using-streams-api/
+- https://www.youtube.com/watch?v=U7z4md0DWbU
 
 ## How to Start
 
@@ -280,10 +287,6 @@ stuArr에서 불합격(150점 미만)한 학생의 수를 남자와 여자로 �
 <br>
 <br>
 <br>
-
-
-
-
 
 ## 참고 자료
 
